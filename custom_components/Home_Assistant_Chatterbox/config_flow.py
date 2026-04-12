@@ -5,7 +5,7 @@ import requests
 
 from homeassistant import config_entries
 from homeassistant.core import callback
-from homeassistant.const import CONF_HOST, CONF_PORT, CONF_NAME
+from homeassistant.const import CONF_HOST, CONF_PORT
 
 from .const import (
     DOMAIN,
@@ -53,7 +53,7 @@ class HaChatterboxConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 if is_valid:
                     self._host = host
                     self._port = port
-                    self._name = user_input.get(CONF_NAME, f"Chatterbox TTS ({host}:{port})")
+                    self._name = f"Chatterbox TTS ({host}:{port})"
                     # Fetch voices from the server
                     self._voices = await self.hass.async_add_executor_job(
                         fetch_voices_from_server, host, port
@@ -74,7 +74,6 @@ class HaChatterboxConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 {
                     vol.Required(CONF_HOST, default=DEFAULT_HOST): str,
                     vol.Required(CONF_PORT, default=DEFAULT_PORT): vol.Coerce(int),
-                    vol.Optional(CONF_NAME, default="Chatterbox TTS"): str,
                 }
             ),
             errors=errors,
@@ -88,7 +87,6 @@ class HaChatterboxConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 data={
                     CONF_HOST: self._host,
                     CONF_PORT: self._port,
-                    CONF_NAME: self._name,
                     CONF_VOICE: user_input.get(CONF_VOICE, DEFAULT_VOICE),
                     CONF_TEMPERATURE: user_input.get(CONF_TEMPERATURE, DEFAULT_TEMPERATURE),
                     CONF_EXAGGERATION: user_input.get(CONF_EXAGGERATION, DEFAULT_EXAGGERATION),

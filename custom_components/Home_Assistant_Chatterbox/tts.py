@@ -1,12 +1,13 @@
-"""Chatterbox TTS Provider Platform for Home Assistant."""
+"""Chatterbox TTS Entity Platform for Home Assistant."""
 import logging
 import requests
 import functools
-import voluptuous as vol
 
-from homeassistant.components.tts import Provider, PLATFORM_SCHEMA, TtsAudioType
-from homeassistant.const import CONF_NAME, CONF_HOST, CONF_PORT
-import homeassistant.helpers.config_validation as cv
+from homeassistant.components.tts import TextToSpeechEntity, TtsAudioType
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
+
 from .const import (
     DOMAIN,
     DEFAULT_HOST,
@@ -28,36 +29,54 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
-# Platform schema for TTS configuration
-PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Optional(CONF_NAME, default="Chatterbox TTS"): cv.string,
-})
+
+async def async_setup_entry(
+    hass: HomeAssistant,
+    config_entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+) -> None:
+    """Set up Chatterbox TTS entity from a config entry."""
+    _LOGGER.debug("Setting up TTS entity for config entry: %s", config_entry.entry_id)
+
+    domain_data = hass.data.get(DOMAIN, {})
+    entry_data = domain_data.get(config_entry.entry_id)
+
+    if not entry_data:
+        _LOGGER.error("No entry data found for config entry: %s", config_entry.entry_id)
+        return
+
+    entity = ChatterboxTTSEntity(hass, config_entry, entry_data)
+    async_add_entities([entity])
+    _LOGGER.info("Chatterbox TTS entity created for %s:%s", entry_data["host"], entry_data["port"])
 
 
-class ChatterboxTTSProvider(Provider):
-    """Chatterbox TTS Provider."""
+class ChatterboxTTSEntity(TextToSpeechEntity):
+    """Chatterbox TTS Entity."""
 
-    def __init__(self, hass, host, port, base_url, config_entry):
-        """Initialize the TTS provider."""
+    _attr_has_entity_name = True
+    _attr_name = "Chatterbox TTS"
+    _attr_should_poll = False
+
+    def __init__(self, hass: HomeAssistant, config_entry: ConfigEntry, entry_data: dict):
+        """Initialize the TTS entity."""
         self.hass = hass
-        self._host = host
-        self._port = port
-        self._base_url = base_url
         self._config_entry = config_entry
+        self._host = entry_data["host"]
+        self._port = entry_data["port"]
+        self._base_url = entry_data["base_url"]
         self._voices_cache = None
 
+        self._attr_unique_id = f"chatterbox_tts_{self._host}_{self._port}"
+
         # Get configuration from config entry
-        opts = (config_entry.options if config_entry else {})
-        data = (config_entry.data if config_entry else {})
-        self._language = data.get("language", "en-US")
+        opts = config_entry.options or {}
+        data = config_entry.data or {}
         self._voice = opts.get(CONF_VOICE, data.get(CONF_VOICE, DEFAULT_VOICE))
         self._temperature = opts.get(CONF_TEMPERATURE, data.get(CONF_TEMPERATURE, DEFAULT_TEMPERATURE))
         self._exaggeration = opts.get(CONF_EXAGGERATION, data.get(CONF_EXAGGERATION, DEFAULT_EXAGGERATION))
         self._cfg_weight = opts.get(CONF_CFG_WEIGHT, data.get(CONF_CFG_WEIGHT, DEFAULT_CFG_WEIGHT))
         self._seed = opts.get(CONF_SEED, data.get(CONF_SEED, DEFAULT_SEED))
         self._speed_factor = opts.get(CONF_SPEED_FACTOR, data.get(CONF_SPEED_FACTOR, DEFAULT_SPEED_FACTOR))
-
-        _LOGGER.info("ChatterboxTTSProvider initialized for %s:%s", host, port)
 
     def _get_voices(self):
         """Get voices from server, caching the result."""
@@ -66,26 +85,21 @@ class ChatterboxTTSProvider(Provider):
         return self._voices_cache or [DEFAULT_VOICE]
 
     @property
-    def default_language(self):
-        """Return the default language."""
-        return "en-US"
+    def default_language(self) -> str:
+        return "en"
 
     @property
-    def supported_languages(self):
-        """Return list of supported languages."""
+    def supported_languages(self) -> list[str]:
         return ["en", "en-US"]
 
     @property
-    def supported_options(self):
-        """Return list of supported options."""
+    def supported_options(self) -> list[str]:
         return [CONF_VOICE, CONF_TEMPERATURE, CONF_EXAGGERATION, CONF_CFG_WEIGHT, CONF_SEED, CONF_SPEED_FACTOR]
 
     @property
-    def default_options(self):
-        """Return a dict including default options."""
-        voices = self._get_voices()
+    def default_options(self) -> dict:
         return {
-            CONF_VOICE: voices[0] if voices else DEFAULT_VOICE,
+            CONF_VOICE: self._voice,
             CONF_TEMPERATURE: self._temperature,
             CONF_EXAGGERATION: self._exaggeration,
             CONF_CFG_WEIGHT: self._cfg_weight,
@@ -94,23 +108,17 @@ class ChatterboxTTSProvider(Provider):
         }
 
     @property
-    def supported_voices(self):
-        """Return list of supported voices."""
-        return self._get_voices()
+    def device_info(self):
+        return {
+            "identifiers": {(DOMAIN, f"{self._host}:{self._port}")},
+            "name": "Chatterbox TTS Server",
+            "manufacturer": "Chatterbox",
+            "model": "TTS Server",
+            "configuration_url": f"http://{self._host}:{self._port}",
+        }
 
-    @property
-    def default_voice(self):
-        """Return the default voice."""
-        voices = self._get_voices()
-        return voices[0] if voices else DEFAULT_VOICE
-
-    @property
-    def name(self):
-        """Return the name of the TTS provider."""
-        return "Chatterbox TTS"
-
-    async def async_get_tts_audio(self, message, language, options=None) -> TtsAudioType:
-        """Load TTS from Chatterbox server."""
+    async def async_get_tts_audio(self, message: str, language: str, options: dict | None = None) -> TtsAudioType:
+        """Generate TTS audio from the Chatterbox server."""
         options = options or {}
         selected_voice = options.get(CONF_VOICE, self._voice)
         temperature = options.get(CONF_TEMPERATURE, self._temperature)
@@ -140,63 +148,15 @@ class ChatterboxTTSProvider(Provider):
                     url,
                     json=data,
                     headers={"Content-Type": "application/json"},
-                    timeout=30
+                    timeout=120
                 )
             )
             if response.status_code == 200:
+                _LOGGER.info("Chatterbox TTS generated %d bytes for voice %s", len(response.content), selected_voice)
                 return ("wav", response.content)
             else:
                 _LOGGER.error("Chatterbox TTS request failed: %s %s", response.status_code, response.text)
-                return ("wav", b"")
+                return (None, None)
         except Exception as ex:
             _LOGGER.error("Error connecting to Chatterbox TTS: %s", ex)
-            return ("wav", b"")
-
-
-async def async_setup_entry(hass, config_entry, async_add_entities):
-    """Set up TTS platform from config entry."""
-    _LOGGER.debug("Setting up TTS platform from config entry: %s", config_entry.entry_id)
-
-    # Get domain data
-    domain_data = hass.data.get(DOMAIN, {})
-    entry_data = domain_data.get(config_entry.entry_id)
-
-    if not entry_data:
-        _LOGGER.error("No entry data found for config entry: %s", config_entry.entry_id)
-        return False
-
-    # Create provider
-    provider = ChatterboxTTSProvider(
-        hass=hass,
-        host=entry_data["host"],
-        port=entry_data["port"],
-        base_url=entry_data["base_url"],
-        config_entry=config_entry,
-    )
-
-    # Store provider in hass data for async_get_engine to find
-    hass.data[DOMAIN][f"{config_entry.entry_id}_provider"] = provider
-    _LOGGER.debug("TTS Provider stored in hass.data")
-
-    return True
-
-
-async def async_get_engine(hass, config, discovery_info=None):
-    """Get the TTS engine."""
-    _LOGGER.debug("async_get_engine called")
-
-    # Find our stored provider
-    domain_data = hass.data.get(DOMAIN, {})
-    for key, value in domain_data.items():
-        if key.endswith("_provider") and isinstance(value, ChatterboxTTSProvider):
-            _LOGGER.debug("Found and returning TTS provider")
-            return value
-
-    _LOGGER.debug("No TTS provider found, creating default")
-    return ChatterboxTTSProvider(
-        hass=hass,
-        host=DEFAULT_HOST,
-        port=DEFAULT_PORT,
-        base_url=f"http://{DEFAULT_HOST}:{DEFAULT_PORT}",
-        config_entry=None,
-    )
+            return (None, None)

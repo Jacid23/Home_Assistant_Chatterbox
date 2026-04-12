@@ -8,7 +8,7 @@ DOMAIN = "Home_Assistant_Chatterbox"
 
 # Default connection settings
 DEFAULT_HOST = "localhost"
-DEFAULT_PORT = 8005
+DEFAULT_PORT = 8000
 
 # Default voice and TTS settings
 DEFAULT_VOICE = "Emily.wav"

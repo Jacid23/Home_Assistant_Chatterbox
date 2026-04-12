@@ -6,8 +6,11 @@
         "description": "Connect to your Chatterbox TTS server",
         "data": {
           "host": "Host",
-          "port": "Port",
-          "name": "Name"
+          "port": "Port"
+        },
+        "data_description": {
+          "host": "e.g. 192.168.1.100",
+          "port": "e.g. 8000"
         }
       },
       "settings": {

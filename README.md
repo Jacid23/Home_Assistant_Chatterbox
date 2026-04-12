@@ -1,28 +1,30 @@
 # Chatterbox TTS - Home Assistant Integration
 
-Custom Home Assistant integration for [Chatterbox TTS Server](https://github.com/devnen/Chatterbox-TTS-Server), providing text-to-speech with voice cloning capabilities.
+Custom Home Assistant integration for [Chatterbox TTS Server](https://github.com/devnen/Chatterbox-TTS-Server), providing text-to-speech capabilities.
 
 ## Features
 
-- Built-in voice selection from your server's voice library
-- Voice cloning from reference audio
+- Voice selection dynamically populated from your server's voice library
 - Configurable temperature, exaggeration, CFG weight, seed, and speed
 - Server health monitoring sensor
-- HA service calls for TTS generation
 
 ## Installation (HACS)
 
 1. Add this repository as a custom repository in HACS
-2. Install "Chatterbox TTS"
+2. Install "Chatterbox TTS Client"
 3. Restart Home Assistant
 4. Add the integration via Settings → Devices & Services → Add Integration → "Chatterbox TTS Client"
 
 ## Configuration
 
-During setup you'll be prompted for:
+Setup is two steps:
 
+**Step 1 — Connect to server:**
 - **Host**: IP address of your Chatterbox TTS server
 - **Port**: Server port (default: 8000)
+- **Name**: Display name for the integration
+
+**Step 2 — Voice and settings** (voice list is fetched live from your server):
 - **Voice**: Default voice to use
 - **Temperature**: Controls randomness (0.0-1.0)
 - **Exaggeration**: Controls expressiveness (0.0-2.0)
