@@ -1,0 +1,34 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "HA Chatterbox TTS",
+        "description": "Set up your Chatterbox TTS server connection.",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "name": "Name"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to the Chatterbox TTS server"
+    },
+    "abort": {
+      "already_configured": "Service is already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "tts_options": {
+        "title": "TTS Options",
+        "description": "Configure TTS settings",
+        "data": {
+          "voice": "Voice",
+          "temperature": "Temperature",
+          "speed_factor": "Speed Factor"
+        }
+      }
+    }
+  }
+}

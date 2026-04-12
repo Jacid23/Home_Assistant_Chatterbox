@@ -1,0 +1,14 @@
+{
+  "domain": "Home_Assistant_Chatterbox",
+  "name": "Chatterbox TTS Client",
+  "version": "3.0.0",
+  "documentation": "https://github.com/Jacid23/Home_Assistant_Chatterbox",
+  "issue_tracker": "https://github.com/Jacid23/Home_Assistant_Chatterbox/issues",
+  "dependencies": ["http"],
+  "codeowners": ["@Jacid23"],
+  "requirements": ["requests"],
+  "iot_class": "local_polling",
+  "config_flow": true,
+  "integration_type": "service",
+  "platforms": ["tts"]
+}
