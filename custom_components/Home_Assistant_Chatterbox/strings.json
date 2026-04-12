@@ -1,0 +1,62 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Chatterbox TTS Setup",
+        "description": "Connect to your Chatterbox TTS server",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "name": "Name"
+        }
+      },
+      "settings": {
+        "title": "Chatterbox TTS Settings",
+        "description": "Configure voice and generation options",
+        "data": {
+          "voice": "Default Voice",
+          "temperature": "Temperature (0.0-1.0)",
+          "exaggeration": "Exaggeration (0.0-2.0)",
+          "cfg_weight": "CFG Weight (0.0-1.0)",
+          "seed": "Seed (0 for random)",
+          "speed_factor": "Speed Factor (0.5-2.0)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to server",
+      "unknown": "Unexpected error"
+    },
+    "abort": {
+      "already_configured": "Integration already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Chatterbox TTS Options",
+        "description": "Configure voice and generation options",
+        "data": {
+          "voice": "Voice",
+          "temperature": "Temperature (0.0-1.0)",
+          "exaggeration": "Exaggeration (0.0-2.0)",
+          "cfg_weight": "CFG Weight (0.0-1.0)",
+          "seed": "Seed (0 for random)",
+          "speed_factor": "Speed Factor (0.5-2.0)"
+        }
+      },
+      "tts_options": {
+        "title": "Chatterbox TTS Options",
+        "description": "Configure voice and generation options",
+        "data": {
+          "voice": "Voice",
+          "temperature": "Temperature (0.0-1.0)",
+          "exaggeration": "Exaggeration (0.0-2.0)",
+          "cfg_weight": "CFG Weight (0.0-1.0)",
+          "seed": "Seed (0 for random)",
+          "speed_factor": "Speed Factor (0.5-2.0)"
+        }
+      }
+    }
+  }
+}
