@@ -4,11 +4,9 @@
   "version": "0.1.2-alpha",
   "documentation": "https://github.com/Jacid23/Home_Assistant_Chatterbox",
   "issue_tracker": "https://github.com/Jacid23/Home_Assistant_Chatterbox/issues",
-  "dependencies": ["http"],
+  "dependencies": [],
   "codeowners": ["@Jacid23"],
   "requirements": ["requests"],
-  "iot_class": "local_polling",
-  "config_flow": true,
-  "integration_type": "service",
-  "platforms": ["tts"]
+  "iot_class": "cloud_polling",
+  "config_flow": true
 }
