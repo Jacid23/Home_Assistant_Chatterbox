@@ -4,7 +4,7 @@ import requests
 
 _LOGGER = logging.getLogger(__name__)
 
-DOMAIN = "Home_Assistant_Chatterbox"
+DOMAIN = "chatterbox_tts"
 
 # Default connection settings
 DEFAULT_HOST = "localhost"

@@ -1,5 +1,5 @@
 {
-  "domain": "Home_Assistant_Chatterbox",
+  "domain": "chatterbox_tts",
   "name": "Chatterbox TTS Client",
   "version": "0.1.0-alpha",
   "documentation": "https://github.com/Jacid23/Home_Assistant_Chatterbox",

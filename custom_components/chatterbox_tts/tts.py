@@ -128,26 +128,26 @@ class ChatterboxTTSEntity(TextToSpeechEntity):
         speed_factor = options.get(CONF_SPEED_FACTOR, self._speed_factor)
 
         data = {
-            "text": message,
-            "predefined_voice_id": selected_voice,
+            "model": "chatterbox-turbo",
+            "input": message,
+            "voice": selected_voice,
+            "response_format": "wav",
+            "speed": speed_factor,
             "temperature": temperature,
-            "exaggeration": exaggeration,
-            "cfg_weight": cfg_weight,
             "seed": seed,
-            "speed_factor": speed_factor,
-            "output_format": "wav",
         }
 
         _LOGGER.debug("Chatterbox TTS request: %s", data)
 
         try:
-            url = f"{self._base_url}/tts"
+            url = f"{self._base_url}/v1/audio/speech"
+            headers = {"Content-Type": "application/json"}
             response = await self.hass.async_add_executor_job(
                 functools.partial(
                     requests.post,
                     url,
                     json=data,
-                    headers={"Content-Type": "application/json"},
+                    headers=headers,
                     timeout=120
                 )
             )
