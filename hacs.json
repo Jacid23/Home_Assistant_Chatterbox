@@ -1,5 +1,4 @@
 {
-  "name": "Chatterbox TTS",
-  "render_readme": true,
-  "homeassistant": "2024.1.0"
+    "name": "Chatterbox TTS Client",
+    "homeassistant": "2025.7.0"
 }

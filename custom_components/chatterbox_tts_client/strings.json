@@ -1,0 +1,86 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Add Chatterbox TTS Server",
+        "description": "Connect to a Chatterbox TTS server. API key is optional for local servers.",
+        "data": {
+          "url": "Server URL",
+          "api_key": "API Key (optional)"
+        }
+      },
+      "reconfigure": {
+        "title": "Reconfigure Chatterbox TTS",
+        "description": "Update the server connection for this integration.",
+        "data": {
+          "url": "Server URL",
+          "api_key": "API Key (optional)"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Re-authenticate Chatterbox TTS",
+        "description": "The API key for {title} is no longer valid. Please enter a new API key.",
+        "data": {
+          "api_key": "API Key"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot connect to Chatterbox TTS server. Check the URL and ensure the server is running.",
+      "already_configured": "A connection to this server already exists.",
+      "invalid_api_key": "Invalid API key. Please check your API key and try again.",
+      "duplicate_api_key": "An entry with this API key already exists."
+    },
+    "abort": {
+      "already_configured": "This server is already configured",
+      "reconfigure_successful": "Configuration updated successfully",
+      "reauth_successful": "Re-authentication successful"
+    }
+  },
+  "config_subentries": {
+    "profile": {
+      "entry_type": "TTS agent",
+      "initiate_flow": {
+        "user": "Add TTS agent",
+        "reconfigure": "Reconfigure TTS agent"
+      },
+      "step": {
+        "user": {
+          "title": "Add TTS Agent",
+          "description": "Create a new TTS agent with custom voice and generation settings.",
+          "data": {
+            "profile_name": "Profile name",
+            "model": "Model",
+            "voice": "Voice",
+            "speed": "Speed (0.25–4.0)",
+            "temperature": "Temperature (0.0–1.5)",
+            "exaggeration": "Exaggeration (0.25–2.0)",
+            "cfg_weight": "CFG Weight (0.2–1.0)",
+            "seed": "Seed (0 = random)"
+          }
+        },
+        "reconfigure": {
+          "title": "Update TTS Agent",
+          "description": "Modify voice and generation settings for this TTS agent.",
+          "data": {
+            "model": "Model",
+            "voice": "Voice",
+            "speed": "Speed (0.25–4.0)",
+            "temperature": "Temperature (0.0–1.5)",
+            "exaggeration": "Exaggeration (0.25–2.0)",
+            "cfg_weight": "CFG Weight (0.2–1.0)",
+            "seed": "Seed (0 = random)"
+          }
+        }
+      },
+      "error": {
+        "already_exists": "A profile with this name already exists"
+      },
+      "abort": {
+        "already_configured": "Profile already configured",
+        "reconfigure_successful": "TTS agent reconfigured successfully",
+        "subentry_not_found": "TTS agent not found"
+      }
+    }
+  }
+}
