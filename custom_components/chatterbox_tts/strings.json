@@ -2,19 +2,19 @@
   "config": {
     "step": {
       "user": {
-        "title": "Add Chatterbox TTS Server",
-        "description": "Connect to a Chatterbox TTS server. API key is optional for local servers.",
+        "title": "Add Chatterbox TTS Service",
+        "description": "Set up Chatterbox TTS integration to create TTS agents. API key is optional for local servers.",
         "data": {
-          "url": "Server URL",
-          "api_key": "API Key (optional)"
+          "api_key": "API Key (optional)",
+          "url": "API Endpoint"
         }
       },
       "reconfigure": {
         "title": "Reconfigure Chatterbox TTS",
-        "description": "Update the server connection for this integration.",
+        "description": "Update API credentials for this integration.",
         "data": {
-          "url": "Server URL",
-          "api_key": "API Key (optional)"
+          "api_key": "API Key (optional)",
+          "url": "API Endpoint"
         }
       },
       "reauth_confirm": {

@@ -2,7 +2,9 @@
 Constants for Chatterbox TTS Client custom component
 """
 import logging
-import requests
+import json
+import urllib.request
+import urllib.error
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -37,13 +39,17 @@ def fetch_voices_from_server(url: str) -> list[str]:
     """Fetch available voices from the Chatterbox TTS server."""
     try:
         base = url.split("/v1/")[0].rstrip("/")
-        response = requests.get(f"{base}/v1/audio/voices", timeout=10)
-        if response.status_code == 200:
-            data = response.json()
-            voices = data.get("voices", [])
-            if voices:
-                _LOGGER.debug("Fetched %d voices from server", len(voices))
-                return sorted(voices)
+        req = urllib.request.Request(
+            f"{base}/v1/audio/voices",
+            headers={"Accept": "application/json"},
+        )
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            if resp.status == 200:
+                data = json.loads(resp.read().decode())
+                voices = data.get("voices", [])
+                if voices:
+                    _LOGGER.debug("Fetched %d voices from server", len(voices))
+                    return sorted(voices)
     except Exception as ex:
         _LOGGER.warning("Could not fetch voices from server: %s", ex)
     return []

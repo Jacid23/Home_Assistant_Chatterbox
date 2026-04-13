@@ -62,23 +62,16 @@ def generate_entry_id() -> str:
 
 
 async def async_validate_connection(url: str, api_key: str = "") -> bool:
-    """Validate connectivity to the Chatterbox TTS server.
+    """Check if the Chatterbox TTS server's /health endpoint is reachable.
 
-    Args:
-        url: The API endpoint URL
-        api_key: Optional API key
-
-    Returns:
-        True if validation succeeds
-
-    Raises:
-        CannotConnect: If unable to connect to the API
+    Returns True if the server responds with 200, False otherwise.
+    Never raises — a missing or unreachable /health endpoint is non-fatal;
+    the actual TTS request in async_validate_api_key will confirm connectivity.
     """
     headers = {"Content-Type": "application/json"}
     if api_key:
         headers["Authorization"] = f"Bearer {api_key}"
 
-    # Derive health endpoint from speech URL
     base = url.split("/v1/")[0].rstrip("/")
     health_url = f"{base}/health"
 
@@ -92,14 +85,14 @@ async def async_validate_connection(url: str, api_key: str = "") -> bool:
                 if response.status == 200:
                     _LOGGER.debug("Server connection validated via /health")
                     return True
-                _LOGGER.error("Server health check failed with status %d", response.status)
-                raise CannotConnect(f"Server returned status {response.status}")
-    except aiohttp.ClientError as err:
-        _LOGGER.error("Connection error: %s", err)
-        raise CannotConnect(f"Cannot connect to server: {err}") from err
-    except TimeoutError as err:
-        _LOGGER.error("Connection timed out")
-        raise CannotConnect("Connection timed out") from err
+                _LOGGER.debug(
+                    "Server /health returned %d — skipping health check",
+                    response.status,
+                )
+                return False
+    except Exception as err:
+        _LOGGER.debug("Server /health not reachable (%s) — skipping health check", err)
+        return False
 
 
 async def async_validate_api_key(api_key: str, url: str) -> bool:
@@ -164,8 +157,8 @@ class ChatterboxTTSConfigFlow(ConfigFlow, domain=DOMAIN):
 
     data_schema = vol.Schema(
         {
-            vol.Optional(CONF_URL, default=DEFAULT_URL): str,
             vol.Optional(CONF_API_KEY, default=""): str,
+            vol.Optional(CONF_URL, default=DEFAULT_URL): str,
         }
     )
 
@@ -200,7 +193,7 @@ class ChatterboxTTSConfigFlow(ConfigFlow, domain=DOMAIN):
                                 errors=errors,
                             )
 
-                # Validate server connectivity
+                # Best-effort health check (non-fatal if /health is absent)
                 await async_validate_connection(api_url, api_key)
 
                 # Validate API key if provided
@@ -329,6 +322,7 @@ class ChatterboxTTSConfigFlow(ConfigFlow, domain=DOMAIN):
                             break
 
                 if not errors:
+                    # Best-effort health check (non-fatal if /health is absent)
                     await async_validate_connection(api_url, api_key)
 
                     if api_key:
