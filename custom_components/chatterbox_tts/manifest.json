@@ -1,7 +1,7 @@
 {
   "domain": "chatterbox_tts",
   "name": "Chatterbox TTS Client",
-  "version": "0.1.0-alpha",
+  "version": "0.1.2-alpha",
   "documentation": "https://github.com/Jacid23/Home_Assistant_Chatterbox",
   "issue_tracker": "https://github.com/Jacid23/Home_Assistant_Chatterbox/issues",
   "dependencies": ["http"],
