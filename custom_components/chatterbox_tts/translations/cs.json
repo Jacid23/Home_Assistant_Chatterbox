@@ -1,0 +1,86 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "P\u0159idat Chatterbox TTS server",
+        "description": "P\u0159ipojen\u00ed k serveru Chatterbox TTS. API kl\u00ed\u010d je voliteln\u00fd pro lok\u00e1ln\u00ed servery.",
+        "data": {
+          "url": "URL serveru",
+          "api_key": "API Key (voliteln\u00e9)"
+        }
+      },
+      "reconfigure": {
+        "title": "P\u0159ekonfigurovat Chatterbox TTS",
+        "description": "Aktualizovat p\u0159ipojen\u00ed serveru pro tuto integraci.",
+        "data": {
+          "url": "URL serveru",
+          "api_key": "API Key (voliteln\u00e9)"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Znovu ov\u011b\u0159it Chatterbox TTS",
+        "description": "API kl\u00ed\u010d pro {title} ji\u017e nen\u00ed platn\u00fd. Zadejte pros\u00edm nov\u00fd API kl\u00ed\u010d.",
+        "data": {
+          "api_key": "API kl\u00ed\u010d"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Nelze se p\u0159ipojit k serveru Chatterbox TTS. Zkontrolujte URL a ujist\u011bte se, \u017ee server b\u011b\u017e\u00ed.",
+      "already_configured": "P\u0159ipojen\u00ed k tomuto serveru ji\u017e existuje.",
+      "invalid_api_key": "Neplatn\u00fd API kl\u00ed\u010d. Zkontrolujte pros\u00edm sv\u016fj API kl\u00ed\u010d a zkuste to znovu.",
+      "duplicate_api_key": "Z\u00e1znam s t\u00edmto API kl\u00ed\u010dem ji\u017e existuje."
+    },
+    "abort": {
+      "already_configured": "Tento server je ji\u017e nakonfigurov\u00e1n",
+      "reconfigure_successful": "Konfigurace byla \u00fasp\u011b\u0161n\u011b aktualizov\u00e1na",
+      "reauth_successful": "Op\u011btovn\u00e9 ov\u011b\u0159en\u00ed bylo \u00fasp\u011b\u0161n\u00e9"
+    }
+  },
+  "config_subentries": {
+    "profile": {
+      "entry_type": "TTS agent",
+      "initiate_flow": {
+        "user": "P\u0159idat TTS agenta",
+        "reconfigure": "P\u0159ekonfigurovat TTS agenta"
+      },
+      "step": {
+        "user": {
+          "title": "P\u0159idat TTS agenta",
+          "description": "Vytvo\u0159te nov\u00e9ho TTS agenta s vlastn\u00edm nastaven\u00edm hlasu a generov\u00e1n\u00ed.",
+          "data": {
+            "profile_name": "N\u00e1zev profilu",
+            "model": "Model",
+            "voice": "Hlas",
+            "speed": "Rychlost (0,25\u20134,0)",
+            "temperature": "Teplota (0,0\u20131,5)",
+            "exaggeration": "P\u0159eh\u00e1n\u011bn\u00ed (0,25\u20132,0)",
+            "cfg_weight": "CFG v\u00e1ha (0,2\u20131,0)",
+            "seed": "Seed (0 = n\u00e1hodn\u00e9)"
+          }
+        },
+        "reconfigure": {
+          "title": "Aktualizovat TTS agenta",
+          "description": "Upravit nastaven\u00ed hlasu a generov\u00e1n\u00ed pro tohoto TTS agenta.",
+          "data": {
+            "model": "Model",
+            "voice": "Hlas",
+            "speed": "Rychlost (0,25\u20134,0)",
+            "temperature": "Teplota (0,0\u20131,5)",
+            "exaggeration": "P\u0159eh\u00e1n\u011bn\u00ed (0,25\u20132,0)",
+            "cfg_weight": "CFG v\u00e1ha (0,2\u20131,0)",
+            "seed": "Seed (0 = n\u00e1hodn\u00e9)"
+          }
+        }
+      },
+      "error": {
+        "already_exists": "Profil s t\u00edmto n\u00e1zvem ji\u017e existuje"
+      },
+      "abort": {
+        "already_configured": "Profil je ji\u017e nakonfigurov\u00e1n",
+        "reconfigure_successful": "TTS agent byl \u00fasp\u011b\u0161n\u011b p\u0159ekonfigurov\u00e1n",
+        "subentry_not_found": "TTS agent nebyl nalezen"
+      }
+    }
+  }
+}

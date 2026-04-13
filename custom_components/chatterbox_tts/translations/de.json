@@ -1,0 +1,86 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Chatterbox TTS-Server hinzufugen",
+        "description": "Verbindung zu einem Chatterbox TTS-Server herstellen. API Key ist fur lokale Server optional.",
+        "data": {
+          "url": "Server-URL",
+          "api_key": "API Key (optional)"
+        }
+      },
+      "reconfigure": {
+        "title": "Chatterbox TTS neu konfigurieren",
+        "description": "Serververbindung fur diese Integration aktualisieren.",
+        "data": {
+          "url": "Server-URL",
+          "api_key": "API Key (optional)"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Chatterbox TTS erneut authentifizieren",
+        "description": "Der API-Schlussel fur {title} ist nicht mehr gultig. Bitte geben Sie einen neuen API-Schlussel ein.",
+        "data": {
+          "api_key": "API-Schlussel"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung zum Chatterbox TTS-Server nicht moglich. Uberprufen Sie die URL und stellen Sie sicher, dass der Server lauft.",
+      "already_configured": "Eine Verbindung zu diesem Server existiert bereits.",
+      "invalid_api_key": "Ungultiger API-Schlussel. Bitte uberprufen Sie Ihren API-Schlussel und versuchen Sie es erneut.",
+      "duplicate_api_key": "Ein Eintrag mit diesem API-Schlussel existiert bereits."
+    },
+    "abort": {
+      "already_configured": "Dieser Server ist bereits konfiguriert",
+      "reconfigure_successful": "Konfiguration erfolgreich aktualisiert",
+      "reauth_successful": "Erneute Authentifizierung erfolgreich"
+    }
+  },
+  "config_subentries": {
+    "profile": {
+      "entry_type": "TTS-Agent",
+      "initiate_flow": {
+        "user": "TTS-Agent hinzufugen",
+        "reconfigure": "TTS-Agent neu konfigurieren"
+      },
+      "step": {
+        "user": {
+          "title": "TTS-Agent hinzufugen",
+          "description": "Erstellen Sie einen neuen TTS-Agenten mit benutzerdefinierten Stimm- und Generierungseinstellungen.",
+          "data": {
+            "profile_name": "Profilname",
+            "model": "Modell",
+            "voice": "Stimme",
+            "speed": "Geschwindigkeit (0,25\u20134,0)",
+            "temperature": "Temperatur (0,0\u20131,5)",
+            "exaggeration": "Ubertreibung (0,25\u20132,0)",
+            "cfg_weight": "CFG-Gewicht (0,2\u20131,0)",
+            "seed": "Seed (0 = zufallig)"
+          }
+        },
+        "reconfigure": {
+          "title": "TTS-Agent aktualisieren",
+          "description": "Stimm- und Generierungseinstellungen fur diesen TTS-Agenten andern.",
+          "data": {
+            "model": "Modell",
+            "voice": "Stimme",
+            "speed": "Geschwindigkeit (0,25\u20134,0)",
+            "temperature": "Temperatur (0,0\u20131,5)",
+            "exaggeration": "Ubertreibung (0,25\u20132,0)",
+            "cfg_weight": "CFG-Gewicht (0,2\u20131,0)",
+            "seed": "Seed (0 = zufallig)"
+          }
+        }
+      },
+      "error": {
+        "already_exists": "Ein Profil mit diesem Namen existiert bereits"
+      },
+      "abort": {
+        "already_configured": "Profil bereits konfiguriert",
+        "reconfigure_successful": "TTS-Agent erfolgreich neu konfiguriert",
+        "subentry_not_found": "TTS-Agent nicht gefunden"
+      }
+    }
+  }
+}
